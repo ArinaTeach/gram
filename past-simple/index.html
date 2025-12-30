@@ -1,1 +1,728 @@
-Game 2 works
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Irregular Verbs – Part 2 (5th Grade)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(circle at top, #dbeafe 0, #bfdbfe 35%, #93c5fd 75%, #60a5fa 100%);
+      padding:16px;
+    }
+
+    .app{
+      width:100%;
+      max-width: 980px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+      padding: 20px 20px 24px;
+      position: relative;
+      overflow: hidden;
+      color:#e5e7eb;
+    }
+
+    .app::before,.app::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      opacity:.22;
+      filter: blur(4px);
+      z-index:-1;
+    }
+    .app::before{ width:240px;height:240px;background:#38bdf8; top:-80px; right:-50px;}
+    .app::after{ width:260px;height:260px;background:#6366f1; bottom:-110px; left:-70px;}
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .title-block{ display:flex; flex-direction:column; gap:4px; }
+    h1{
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+      font-weight: 900;
+      color:#e0f2fe;
+      letter-spacing:.04em;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      text-transform: uppercase;
+    }
+    h1 span.emoji{ font-size: 1.7rem; }
+
+    .top-bar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .mode-name{
+      font-size: 0.95rem;
+      font-weight: 800;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      color:#bfdbfe;
+    }
+    .mode-pill{
+      border-radius:999px;
+      padding: 2px 8px;
+      font-size: .75rem;
+      background: rgba(37, 99, 235, 0.3);
+      color:#e0f2fe;
+    }
+
+    .btn-row{ display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
+    .btn{
+      border-radius:999px;
+      padding:7px 14px;
+      border:none;
+      font-size:.85rem;
+      font-weight:700;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      transition: transform .16s ease, box-shadow .16s ease, filter .16s ease, background .16s ease, color .16s ease;
+      white-space: nowrap;
+    }
+    .btn.secondary{
+      background: rgba(15,23,42,.7);
+      color:#e5e7eb;
+      border:1px solid rgba(148,163,184,.6);
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color:#f9fafb;
+      box-shadow: 0 10px 22px rgba(37,99,235,.7);
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .btn:active{ transform: translateY(0); box-shadow:none; filter: brightness(.97); }
+
+    .tabs{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+    .tab{
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(15,23,42,.65);
+      border: 1px solid rgba(148,163,184,.45);
+      color:#e5e7eb;
+      cursor:pointer;
+      font-weight:800;
+      font-size:.85rem;
+      transition: transform .16s ease, filter .16s ease, background .16s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .tab:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .tab.active{
+      background: radial-gradient(circle at top left, rgba(59,130,246,.9), rgba(15,23,42,.9));
+      border-color: rgba(147,197,253,.8);
+      color:#e0f2fe;
+      box-shadow: 0 10px 24px rgba(15,23,42,.8);
+    }
+
+    .panel{
+      background: radial-gradient(circle at top left, #1e293b, #020617 55%);
+      border-radius: 20px;
+      padding: 16px 14px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      position: relative;
+      overflow:hidden;
+    }
+    .panel.shuffling{ animation: wobble .35s ease; }
+
+    .stats-bar{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+      color:#cbd5f5;
+      font-size: .85rem;
+    }
+    .stats{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      background: rgba(15,23,42,.8);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.7);
+      font-weight:700;
+    }
+    .chip{
+      background: rgba(37,99,235,.35);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 800;
+      color:#e0f2fe;
+    }
+    .dot{
+      width:4px;height:4px;border-radius:999px;background:#9ca3af;
+      display:inline-block;
+    }
+
+    .task-list{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .task{
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,.45);
+      background: rgba(15,23,42,.65);
+      padding: 12px 12px 12px;
+      box-shadow: 0 10px 24px rgba(15,23,42,.55);
+    }
+
+    .task-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .qline{
+      font-weight: 850;
+      color:#e0f2fe;
+      letter-spacing: .01em;
+      line-height: 1.25;
+      font-size: 1rem;
+    }
+
+    .options{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    @media (min-width: 720px){
+      .options{ grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .opt{
+      border-radius: 16px;
+      padding: 10px 10px;
+      cursor:pointer;
+      user-select:none;
+      text-align:center;
+      font-weight: 850;
+      letter-spacing: .02em;
+      border: 1px solid rgba(148,163,184,.45);
+      background: radial-gradient(circle at top left, rgba(59,130,246,.35), rgba(15,23,42,.85));
+      color:#e5e7eb;
+      transition: transform .14s ease, filter .14s ease, background .14s ease, border-color .14s ease;
+      min-height: 46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .opt:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+
+    .opt.locked{ cursor: default; opacity: .95; }
+    .opt.correct{
+      background: radial-gradient(circle at top left, rgba(34,197,94,.75), rgba(5,46,22,.9));
+      border-color: rgba(74,222,128,.85);
+      color:#ecfdf5;
+    }
+    .opt.wrong{
+      background: radial-gradient(circle at top left, rgba(239,68,68,.7), rgba(69,10,10,.9));
+      border-color: rgba(248,113,113,.85);
+      color:#fef2f2;
+    }
+
+    .hint{
+      margin-top: 8px;
+      font-size: .82rem;
+      color: rgba(203,213,245,.85);
+      display:none;
+    }
+    .task.revealed .hint{ display:block; }
+
+    @keyframes wobble{
+      0%{ transform: translateX(0); }
+      25%{ transform: translateX(-4px); }
+      50%{ transform: translateX(4px); }
+      100%{ transform: translateX(0); }
+    }
+
+    @media (max-width: 480px){
+      .btn-row{ justify-content:flex-start; width:100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="app" aria-label="Irregular Verbs – Part 2 Trainer">
+  <header>
+    <div class="title-block">
+      <h1><span class="emoji">🧩</span> Irregular Verbs</h1>
+    </div>
+  </header>
+
+  <div class="top-bar">
+    <div class="mode-name">
+      Grammar 
+      <span class="mode-pill">Past Simple</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn secondary" id="resetBtn" type="button">Сбросить ✨</button>
+      <button class="btn secondary" id="showBtn" type="button">Показать ответы 👀</button>
+           <button class="btn primary" id="shuffleBtn" type="button">Перемешать 🔀</button>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Блоки тренажёра">
+    <div class="tab active" data-tab="aff" role="tab" aria-selected="true">✅ Affirmative</div>
+    <div class="tab" data-tab="neg" role="tab" aria-selected="false">⛔ Negative</div>
+    <div class="tab" data-tab="qa" role="tab" aria-selected="false">❓ Interrogative</div>
+    <div class="tab" data-tab="final" role="tab" aria-selected="false">🏁 Final Test</div>
+  </div>
+
+  <section class="panel" id="panel">
+    <div class="stats-bar">
+      <div class="stats">
+        <span>Правильно:</span> <span class="chip" id="okCnt">0</span>
+        <span class="dot"></span>
+        <span>Ошибки:</span> <span class="chip" id="badCnt">0</span>
+      </div>
+      <div class="stats">
+        <span>Прогресс:</span> <span class="chip"><span id="doneCnt">0</span>/<span id="totalCnt">15</span></span>
+      </div>
+    </div>
+
+    <div class="task-list" id="taskList"></div>
+  </section>
+</div>
+
+<script>
+  // ===== verbs (same list) =====
+  const VERBS = [
+    { ru:"быть", v1:"be", v2:"was / were", v3:"been" },
+    { ru:"начинать", v1:"begin", v2:"began", v3:"begun" },
+    { ru:"покупать", v1:"buy", v2:"bought", v3:"bought" },
+    { ru:"приходить", v1:"come", v2:"came", v3:"come" },
+    { ru:"делать", v1:"do", v2:"did", v3:"done" },
+    { ru:"пить", v1:"drink", v2:"drank", v3:"drunk" },
+    { ru:"есть", v1:"eat", v2:"ate", v3:"eaten" },
+    { ru:"получать", v1:"get", v2:"got", v3:"got" },
+    { ru:"давать", v1:"give", v2:"gave", v3:"given" },
+    { ru:"идти", v1:"go", v2:"went", v3:"gone" },
+    { ru:"иметь", v1:"have", v2:"had", v3:"had" },
+    { ru:"уходить", v1:"leave", v2:"left", v3:"left" },
+    { ru:"делать/создавать", v1:"make", v2:"made", v3:"made" },
+    { ru:"бегать", v1:"run", v2:"ran", v3:"run" },
+    { ru:"говорить/сказать", v1:"say", v2:"said", v3:"said" },
+    { ru:"говорить", v1:"speak", v2:"spoke", v3:"spoken" },
+    { ru:"сидеть", v1:"sit", v2:"sat", v3:"sat" },
+    { ru:"брать", v1:"take", v2:"took", v3:"taken" },
+    { ru:"думать", v1:"think", v2:"thought", v3:"thought" },
+    { ru:"понимать", v1:"understand", v2:"understood", v3:"understood" },
+
+    { ru:"приносить", v1:"bring", v2:"brought", v3:"brought" },
+    { ru:"побеждать", v1:"win", v2:"won", v3:"won" },
+    { ru:"встречать", v1:"meet", v2:"met", v3:"met" },
+    { ru:"забывать", v1:"forget", v2:"forgot", v3:"forgotten" },
+    { ru:"видеть", v1:"see", v2:"saw", v3:"seen" },
+    { ru:"класть", v1:"put", v2:"put", v3:"put" },
+    { ru:"знать", v1:"know", v2:"knew", v3:"known" },
+    { ru:"писать", v1:"write", v2:"wrote", v3:"written" },
+    { ru:"ездить верхом", v1:"ride", v2:"rode", v3:"ridden" },
+    { ru:"учить/учиться", v1:"learn", v2:"learnt", v3:"learnt" },
+    { ru:"ломать", v1:"break", v2:"broke", v3:"broken" },
+    { ru:"строить", v1:"build", v2:"built", v3:"built" },
+    { ru:"ловить", v1:"catch", v2:"caught", v3:"caught" },
+    { ru:"находить", v1:"find", v2:"found", v3:"found" },
+    { ru:"летать", v1:"fly", v2:"flew", v3:"flown" },
+    { ru:"слышать", v1:"hear", v2:"heard", v3:"heard" },
+    { ru:"терять", v1:"lose", v2:"lost", v3:"lost" },
+    { ru:"держать/хранить", v1:"keep", v2:"kept", v3:"kept" },
+    { ru:"читать", v1:"read", v2:"read", v3:"read" },
+    { ru:"показывать", v1:"show", v2:"showed", v3:"shown" },
+    { ru:"петь", v1:"sing", v2:"sang", v3:"sung" },
+    { ru:"спать", v1:"sleep", v2:"slept", v3:"slept" },
+    { ru:"стоять", v1:"stand", v2:"stood", v3:"stood" },
+    { ru:"плавать", v1:"swim", v2:"swam", v3:"swum" },
+    { ru:"учить/обучать", v1:"teach", v2:"taught", v3:"taught" },
+    { ru:"рассказывать", v1:"tell", v2:"told", v3:"told" },
+    { ru:"просыпаться", v1:"wake up", v2:"woke up", v3:"woken up" },
+    { ru:"носить", v1:"wear", v2:"wore", v3:"worn" }
+  ];
+
+  const VERB_MAP = new Map(VERBS.map(v => [v.v1, v]));
+
+  // ===== 5th grade задания: каждое предложение привязано к нужному глаголу =====
+  // mode: "past" -> correct V2; "base" -> correct V1
+  const SPECS = {
+    aff: [
+    { verb:"be", text:"Yesterday I ____ at home after school.", mode:"past", force:"was" },
+    { verb:"begin", text:"The lesson ____ at 9 o’clock.", mode:"past" },
+    { verb:"buy", text:"My mum ____ a new notebook for me.", mode:"past" },
+    { verb:"come", text:"My friend ____ to my house yesterday.", mode:"past" },
+    { verb:"do", text:"I ____ my homework in the evening.", mode:"past" },
+    { verb:"drink", text:"He ____ green tea last week.", mode:"past" },
+    { verb:"eat", text:"We ____ sandwiches for lunch.", mode:"past" },
+    { verb:"get", text:"I ____ a message from my teacher yesterday.", mode:"past" },
+    { verb:"give", text:"My dad ____ me some money last Sunday.", mode:"past" },
+    { verb:"go", text:"We ____ to the park after school.", mode:"past" },
+    { verb:"have", text:"She ____ a great day yesterday.", mode:"past" },
+    { verb:"leave", text:"They ____ school at 3 o’clock.", mode:"past" },
+    { verb:"make", text:"I ____ a cake with my mum.", mode:"past" },
+    { verb:"run", text:"He ____ fast in PE yesterday.", mode:"past" },
+    { verb:"say", text:"The teacher ____ “Good job!”", mode:"past" }
+    ],
+    neg: [
+      { verb:"speak", text:"I didn’t ____ English in the shop.", mode:"base" },
+    { verb:"sit", text:"We didn’t ____ near the window.", mode:"base" },
+    { verb:"take", text:"She didn’t ____ my phone.", mode:"base" },
+    { verb:"think", text:"I didn’t ____ it was difficult.", mode:"base" },
+    { verb:"understand", text:"He didn’t ____ the homework.", mode:"base" },
+    { verb:"bring", text:"They didn’t ____ water to the picnic.", mode:"base" },
+    { verb:"win", text:"Our team didn’t ____ the match.", mode:"base" },
+    { verb:"meet", text:"I didn’t ____ my friend after school.", mode:"base" },
+    { verb:"forget", text:"He didn’t ____ to call his friend.", mode:"base" },
+    { verb:"see", text:"We didn’t ____ the new teacher yesterday.", mode:"base" },
+    { verb:"buy", text:"He didn’t ____ apples yesterday.", mode:"base" },
+    { verb:"know", text:"I didn’t ____ the answer.", mode:"base" },
+    { verb:"write", text:"She didn’t ____ a message to me.", mode:"base" },
+    { verb:"ride", text:"He didn’t ____ a bike yesterday.", mode:"base" },
+    { verb:"learn", text:"We didn’t ____ these words yesterday.", mode:"base" }
+    ],
+    qa: [
+      { verb:"break", text:"Why did you ____ your pencil yesterday?", mode:"base" },
+    { verb:"build", text:"When did they ____ that school?", mode:"base" },
+    { verb:"catch", text:"Did you ____ the ball?", mode:"base" },
+    { verb:"find", text:"Did she ____ her keys?", mode:"base" },
+    { verb:"fly", text:"Did they ____ a kite on Sunday?", mode:"base" },
+    { verb:"hear", text:"Did you ____ that?", mode:"base" },
+    { verb:"lose", text:"Where did you ____ your phone?", mode:"base" },
+    { verb:"keep", text:"Did she ____ your secret?", mode:"base" },
+    { verb:"bring", text:"What did you ____ ?", mode:"base" },
+    { verb:"show", text:"Did he ____ you his new game?", mode:"base" },
+    { verb:"sing", text:"What songs did they ____ at the concert last week?", mode:"base" },
+    { verb:"sleep", text:"Did you ____ well last night?", mode:"base" },
+    { verb:"stand", text:"Where did she ____ at the school concert?", mode:"base" },
+    { verb:"swim", text:"Did you ____ in the pool?", mode:"base" },
+    { verb:"teach", text:"Did your dad ____ you to ride a horse?", mode:"base" }
+    ],
+    final: [
+      { verb:"tell", text:"Yesterday my friend ____ me a funny story.", mode:"past" },
+    { verb:"wake up", text:"I ____ early yesterday.", mode:"past" },
+    { verb:"wear", text:"She ____ a new jacket yesterday.", mode:"past" },
+
+    { verb:"go", text:"We ____ to the cinema last weekend.", mode:"past" },
+    { verb:"see", text:"Did you ____ the new cartoon? — Yes, I did.", mode:"base" },
+    { verb:"buy", text:"I didn’t ____ anything in the shop.", mode:"base" },
+    { verb:"eat", text:"He ____ an apple for a snack.", mode:"past" },
+    { verb:"do", text:"Did you ____ your homework? — No, I didn’t.", mode:"base" },
+    { verb:"make", text:"We ____ a poster for our class project.", mode:"past" },
+    { verb:"write", text:"Did she ____ an email to the teacher? — Yes, she did.", mode:"base" },
+    { verb:"find", text:"He ____ his notebook in his bag.", mode:"past" },
+    { verb:"take", text:"I didn’t ____ my phone to school.", mode:"base" },
+    { verb:"meet", text:"Did you ____ your cousin yesterday? — No, I didn’t.", mode:"base" },
+    { verb:"win", text:"Our team ____ the game yesterday!", mode:"past" },
+    { verb:"read", text:"We ____ a short story in English.", mode:"past" }
+    ]
+  };
+
+  // ===== DOM =====
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  const taskList = $("#taskList");
+  const panel = $("#panel");
+
+  const okCnt = $("#okCnt");
+  const badCnt = $("#badCnt");
+  const doneCnt = $("#doneCnt");
+  const totalCnt = $("#totalCnt");
+
+  const shuffleBtn = $("#shuffleBtn");
+  const resetBtn = $("#resetBtn");
+  const showBtn = $("#showBtn");
+ 
+
+  const tabs = $$(".tab");
+
+  let activeTab = "aff";
+  let state = { aff:null, neg:null, qa:null, final:null };
+  let showMode = { aff:false, neg:false, qa:false, final:false };
+
+
+  function shuffleArray(arr){
+    const a = [...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+
+  function stripSpaces(s){ return String(s).replace(/\s+/g," ").trim(); }
+
+  function makeEdForm(v1){
+    const base = stripSpaces(v1);
+    if(base.includes(" ")) return base + "ed";
+    if(base.endsWith("e")) return base + "d";
+    if(base.endsWith("y")) return base.slice(0,-1) + "ied";
+    return base + "ed";
+  }
+
+  function pickDistractor(v){
+    const v1 = stripSpaces(v.v1);
+    const v2 = stripSpaces(v.v2);
+    const v3 = stripSpaces(v.v3);
+    const ed = makeEdForm(v1);
+
+    const canUseV3 = (v3 && v3 !== v2 && v3 !== v1);
+    if(canUseV3) return v3;
+
+    if(ed !== v1 && ed !== v2) return ed;
+    return ed;
+  }
+
+  function makeOptionsBalanced(correct, other1, other2, slotIndex){
+    const opts = [null,null,null];
+    opts[slotIndex] = correct;
+    const rest = shuffleArray([other1, other2]);
+    let k = 0;
+    for(let i=0;i<3;i++){
+      if(opts[i] === null) opts[i] = rest[k++];
+    }
+    return opts;
+  }
+
+  function buildTasks(tabKey){
+    // ВАЖНО: здесь мы балансируем позицию правильного ответа 1/2/3
+    const list = SPECS[tabKey].map((spec, i) => {
+      const v = VERB_MAP.get(spec.verb);
+      if(!v){
+        console.warn("Verb not found:", spec.verb);
+        return null;
+      }
+
+      const v1 = stripSpaces(v.v1);
+      const v2 = stripSpaces(v.v2);
+      const distract = pickDistractor(v);
+
+     const correct = spec.force
+  ? spec.force
+  : (spec.mode === "past" ? v2 : v1);
+
+
+     
+
+// options "V1, V2, V3/-ed"
+let opt1, opt2, opt3;
+
+if (v1 === "be") {
+  // be → was / am / been
+  opt1 = "was";
+  opt2 = "am";
+  opt3 = "been";
+
+} else if (v1 === "read") {
+  // read → read / reads / readed (5 класс)
+  opt1 = "read";
+  opt2 = "reads";
+  opt3 = "readed";
+
+} else {
+  opt1 = v1;
+  opt2 = v2;
+  opt3 = distract;
+}
+
+
+
+      // try to avoid duplicates if possible
+      if(opt3 === opt1 || opt3 === opt2){
+        const ed = makeEdForm(v1);
+        if(ed !== opt1 && ed !== opt2) opt3 = ed;
+      }
+
+      // choose correct position equally: 0,1,2 cycle
+      const correctSlot = i % 3;
+      const pool = [opt1,opt2,opt3].filter(x => x !== correct);
+      const other1 = pool[0] ?? opt1;
+      const other2 = pool[1] ?? opt3;
+      const options = makeOptionsBalanced(correct, other1, other2, correctSlot);
+
+      const hint = (spec.mode === "past")
+        ? `Past Simple → V2`
+        : `After did / didn’t → V1`;
+
+      return {
+        id: `${tabKey}-${i}`,
+        q: spec.text,
+        correct,
+        options,
+        hint,
+        chosen: null,
+        isCorrect: null,
+        revealed: false
+      };
+    }).filter(Boolean);
+
+    return list;
+  }
+
+  function ensureState(tabKey){
+    if(!state[tabKey]){
+      state[tabKey] = buildTasks(tabKey);
+    }
+  }
+
+  function computeStats(tabKey){
+    const items = state[tabKey];
+    const done = items.filter(x => x.chosen !== null).length;
+    const ok = items.filter(x => x.isCorrect === true).length;
+    const bad = items.filter(x => x.isCorrect === false).length;
+    return { done, ok, bad, total: items.length };
+  }
+
+  function render(tabKey){
+    ensureState(tabKey);
+    const items = state[tabKey];
+
+    const s = computeStats(tabKey);
+    okCnt.textContent = s.ok;
+    badCnt.textContent = s.bad;
+    doneCnt.textContent = s.done;
+    totalCnt.textContent = s.total;
+
+    taskList.innerHTML = "";
+
+    items.forEach((t) => {
+      const card = document.createElement("div");
+      card.className = "task";
+      card.dataset.taskId = t.id;
+
+      const top = document.createElement("div");
+      top.className = "task-top";
+
+      const q = document.createElement("div");
+      q.className = "qline";
+      q.textContent = t.q;
+
+      top.appendChild(q);
+
+      const opts = document.createElement("div");
+      opts.className = "options";
+
+      t.options.forEach(optText => {
+        const opt = document.createElement("div");
+        opt.className = "opt";
+        opt.textContent = optText;
+
+        const inShowMode = showMode[tabKey];
+
+if(t.chosen !== null || inShowMode){
+  opt.classList.add("locked");
+  if(optText === t.correct) opt.classList.add("correct");
+
+  // красное показываем только если НЕ режим "Показать ответы"
+  if(!inShowMode && optText === t.chosen && t.chosen !== t.correct){
+    opt.classList.add("wrong");
+  }
+}
+
+
+        opt.addEventListener("click", () => {
+          if(t.chosen !== null) return;
+          t.chosen = optText;
+          t.isCorrect = (optText === t.correct);
+          t.revealed = true;
+          render(tabKey);
+        });
+
+        opts.appendChild(opt);
+      });
+
+    
+
+      if(t.revealed || t.chosen !== null) card.classList.add("revealed");
+
+      card.appendChild(top);
+      card.appendChild(opts);
+     
+
+      taskList.appendChild(card);
+    });
+  }
+
+  function setActiveTab(tabKey){
+    activeTab = tabKey;
+    tabs.forEach(t => {
+      const isActive = t.dataset.tab === tabKey;
+      t.classList.toggle("active", isActive);
+      t.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+    render(tabKey);
+  }
+
+  shuffleBtn.addEventListener("click", () => {
+    showMode[activeTab] = false;
+	ensureState(activeTab);
+    state[activeTab] = shuffleArray(state[activeTab]);
+
+    // после перемешивания снова выравниваем позицию правильного ответа 1/2/3
+    state[activeTab] = state[activeTab].map((t, i) => {
+      const correctSlot = i % 3;
+      const others = t.options.filter(x => x !== t.correct);
+      const options = makeOptionsBalanced(t.correct, others[0], others[1], correctSlot);
+      return { ...t, options };
+    });
+
+    panel.classList.add("shuffling");
+    render(activeTab);
+    setTimeout(()=>panel.classList.remove("shuffling"), 350);
+  });
+
+ 
+  resetBtn.addEventListener("click", () => {
+  showMode[activeTab] = false;
+  state[activeTab] = null;
+  render(activeTab);
+});
+
+
+  showBtn.addEventListener("click", () => {
+  ensureState(activeTab);
+  showMode[activeTab] = true;   // включаем режим показа
+  render(activeTab);
+});
+
+
+ 
+
+  tabs.forEach(tab => tab.addEventListener("click", () => setActiveTab(tab.dataset.tab)));
+
+  setActiveTab("aff");
+</script>
+</body>
+</html>
