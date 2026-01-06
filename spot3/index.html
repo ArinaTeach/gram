@@ -1,1 +1,1552 @@
-fdasddf
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Back to school: Winter Edition</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* LIGHT PASTEL THEME */
+      --bg0:#fbfbff;
+      --bg1:#f4f7ff;
+      --bg2:#fff7f1;
+
+      --panel: rgba(240,247,243,.90);   /* основной фон карточек */
+      --panel2: rgba(245,250,247,.95);  /* шапки / вложенные */
+      --soft-yellow: #FFF7E6;
+
+      --line: rgba(17,24,39,.10);
+
+      --ink: #111827;       /* ВСЁ ЧЁРНЫМ/ТЁМНЫМ */
+      --muted: rgba(17,24,39,.62);
+
+      --good: #16a34a;
+      --bad: #dc2626;
+
+      --accent: rgba(147,197,253,.90);
+      --shadow: 0 16px 40px rgba(17,24,39,.10);
+      --radius: 20px;
+
+      --tap: 48px;
+
+      /* чтобы не было "пустого var(--warm-sand)" */
+      --warm-sand: rgba(255,255,255,0);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--ink);
+      font-family: "Atkinson Hyperlegible", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+
+      background-image: url("images/back.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .wrap{
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 16px;
+      min-height: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .app{
+      width:100%;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+      background: var(--panel);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 6px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel2);
+      backdrop-filter: blur(10px);
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width: 280px;
+    }
+    .title h1{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.4px;
+      color: var(--ink);
+    }
+    .title .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      line-height:1.25;
+    }
+
+    .headerRight{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    /* ❄️ банк снежинок (скрыт, чтобы reset не ломался) */
+    .snowBank{
+      display:none;
+    }
+
+    .topBtns{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+    }
+
+    .btn{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.85);
+      color: var(--ink);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 800;
+      min-height: var(--tap);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      transition: transform .05s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:hover{ background: rgba(255,255,255,.95); }
+    .btn:active{ transform: translateY(1px); }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    /* ✅ ВОТ САМЫЙ ВАЖНЫЙ КУСОК: Total disabled выглядит как обычная кнопка */
+    .btn.totalBtn:disabled{
+      opacity: 1;
+      cursor: default;
+      background: rgba(255,255,255,.85);
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap: 14px;
+      padding: 12px 14px 14px;
+      align-items: start;
+    }
+
+    /* LEFT */
+    .sidebar{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      overflow:hidden;
+    }
+    .sidebarHead{
+      padding: 4px 18px 4px !important;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel2);
+    }
+
+    .sidebarHead p{
+      margin: 6px 0 0;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.35;
+      font-weight: 700;
+	  position: relative;
+top: -16px;
+
+    }
+
+    .taskList{
+      padding: 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+    }
+
+    .taskBtn{
+      width:100%;
+      justify-content:space-between;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      color: var(--ink);
+      cursor:pointer;
+      min-height: var(--tap);
+      font-weight: 900;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .taskBtn:hover{ background:#FFFBEF; }
+    .taskBtn.active{
+      background: #FFFFF0;
+      border-color: rgba(245,200,90,.45);
+    }
+
+    .taskBtn .left{
+      display:flex;
+      flex-direction:column;
+      gap: 3px;
+      text-align:left;
+    }
+    .taskBtn .left .small{
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .taskBtn .right{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .badge{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+    .doneDot{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(17,24,39,.16);
+      border: 1px solid rgba(17,24,39,.12);
+    }
+    .doneDot.done{
+      background: rgba(22,163,74,.75);
+      border-color: rgba(22,163,74,.75);
+    }
+
+    /* RIGHT */
+    .stage{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow:hidden;
+      position: relative;
+      background: var(--panel);
+    }
+    .stageHead{
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 12px;
+      background: var(--panel2);
+    }
+    .stageHead h2{ margin:0; font-size: 16px; letter-spacing:.2px; color: var(--ink); }
+    .stageHead p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    .stats{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .stat{
+      min-width: 160px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      padding: 6px 10px;
+      border-radius: 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+    }
+    .stat .k{ color: var(--muted); font-size: 11px; font-weight:800; }
+    .stat .v{ font-size: 16px; font-weight: 900; letter-spacing:.3px; color: var(--ink); }
+
+    .stageBody{
+      padding: 8px 12px 12px;
+      background: var(--warm-sand);
+    }
+
+    .note{ color: var(--muted); font-size: 13px; line-height:1.45; }
+
+    .stageFoot{
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      gap: 10px;
+      flex-wrap:wrap;
+      background: var(--panel2);
+    }
+
+    /* Pause overlay */
+    .pauseOverlay{
+      position:absolute;
+      inset: 0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap: 10px;
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(6px);
+      z-index: 10;
+      text-align:center;
+      padding: 16px;
+      color: var(--ink);
+    }
+    .pauseOverlay.show{ display:flex; }
+    .pauseOverlay .big{ font-size: 26px; font-weight: 900; letter-spacing:.4px; }
+    .pauseOverlay .small{ color: var(--muted); font-weight: 800; font-size: 13px; }
+
+    .isPaused .stageBody,
+    .isPaused .stageFoot{
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ===== MCQ rows ===== */
+    /* === Task 3 inner scroll === */
+.task3Scroll{
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.task3Scroll::-webkit-scrollbar{
+  width: 6px;
+}
+.task3Scroll::-webkit-scrollbar-thumb{
+  background: rgba(17,24,39,.25);
+  border-radius: 6px;
+}
+
+	.qList{ display:flex; flex-direction:column; gap: 10px; margin-top: 6px; }
+    .qRow{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      border-radius: 16px;
+      padding: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .qText{
+      font-weight: 900;
+      font-size: 16px;
+      line-height:1.25;
+      color: var(--ink);
+    }
+    .qBtns{ display:flex; gap: 8px; flex-wrap:wrap; justify-content:flex-end; }
+    .opt{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight: 900;
+      min-height: 40px;
+      min-width: 54px;
+      transition: transform .05s ease, background .15s ease;
+      -webkit-tap-highlight-color: transparent;
+      font-size: 15px;
+    }
+    .opt:hover{ background: rgba(255,255,255,.96); }
+    .opt:active{ transform: translateY(1px); }
+    .opt.locked{
+      cursor:default;
+      background: rgba(22,163,74,.14);
+      border-color: rgba(22,163,74,.32);
+    }
+    .opt.wrong{
+      background: rgba(220,38,38,.14);
+      border-color: rgba(220,38,38,.30);
+    }
+/* === Task 1 inner scroll === */
+.task1Scroll{
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.task1Scroll::-webkit-scrollbar{
+  width: 6px;
+}
+.task1Scroll::-webkit-scrollbar-thumb{
+  background: rgba(17,24,39,.25);
+  border-radius: 6px;
+}
+/* === Task 2 inner scroll === */
+.task2Scroll{
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.task2Scroll::-webkit-scrollbar{
+  width: 6px;
+}
+.task2Scroll::-webkit-scrollbar-thumb{
+  background: rgba(17,24,39,.25);
+  border-radius: 6px;
+}
+/* === Task 9 inner scroll === */
+.task9Scroll{
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.task9Scroll::-webkit-scrollbar{
+  width: 6px;
+}
+.task9Scroll::-webkit-scrollbar-thumb{
+  background: rgba(17,24,39,.25);
+  border-radius: 6px;
+}
+/* === Task 6 inner scroll === */
+.task6Scroll{
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.task6Scroll::-webkit-scrollbar{
+  width: 6px;
+}
+.task6Scroll::-webkit-scrollbar-thumb{
+  background: rgba(17,24,39,.25);
+  border-radius: 6px;
+}
+
+    /* ===== Task 4 odd one out ===== */
+    .oddGrid{ display:flex; flex-direction:column; gap: 10px; margin-top: 6px; }
+    .oddRow{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      border-radius: 16px;
+      padding: 10px;
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    /* ===== Task 5 drag-sort words ===== */
+    .sortArea{
+      margin-top: 8px;
+      display:grid;
+      gap: 12px;
+      align-items:start;
+    }
+    .sortWordsArea{
+      grid-template-columns: 280px repeat(3, 180px);
+    }
+
+    .pool{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.86);
+      padding: 12px;
+      min-height: 250px;
+    }
+    .poolTitle{
+      font-weight: 900;
+      font-size: 13px;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+    .items{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      align-items:start;
+      justify-content:start;
+    }
+    .chip{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.92);
+      font-weight: 700;
+      text-align:center;
+      cursor: grab;
+      user-select:none;
+      min-height: 46px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 15px;
+      color: var(--ink);
+      width: 100%;
+    }
+    .chip:active{ cursor: grabbing; }
+    .chip.wrong{
+      background: rgba(220,38,38,.14);
+      border-color: rgba(220,38,38,.30);
+    }
+
+    .bin{
+      border: 2px dashed rgba(17,24,39,.18);
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      padding: 12px;
+      min-height: 260px;
+    }
+    .binHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .binTitle{ font-weight: 900; font-size: 13px; color: var(--ink); }
+    .binHint{ color: var(--muted); font-size: 12px; font-weight: 900; }
+    .bin.dropOk{
+      border-color: rgba(22,163,74,.45);
+      background: rgba(22,163,74,.08);
+    }
+
+    /* ===== Task 7 IPA rows ===== */
+    .ipaRows{ display:flex; flex-direction:column; gap: 10px; margin-top: 8px; }
+    .ipaRow{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      border-radius: 16px;
+      padding: 10px;
+      display:grid;
+      grid-template-columns: 90px 1fr;
+      gap: 10px;
+      align-items:center;
+    }
+    .ipaBadge{
+      border: 1px solid rgba(59,130,246,.22);
+      background: rgba(191,219,254,.35);
+      border-radius: 14px;
+      padding: 10px 8px;
+      text-align:center;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: .2px;
+    }
+    .wordLine{ display:flex; flex-wrap:wrap; gap: 10px; justify-content:flex-start; }
+    .wBtn{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 700;
+      font-size: 16px;
+      min-height: 44px;
+      cursor:pointer;
+    }
+    .wBtn.good{
+      background: rgba(22,163,74,.14);
+      border-color: rgba(22,163,74,.32);
+    }
+    .wBtn.bad{
+      background: rgba(220,38,38,.14);
+      border-color: rgba(220,38,38,.30);
+    }
+    .ipaRow.locked .wBtn{ cursor: default; opacity: .82; }
+
+    /* ===== Task 8 MEMORY (food) ===== */
+    .memGrid{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 760px;
+    }
+
+    .memCard{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      border-radius: 18px;
+      min-height: 110px;
+      cursor: pointer;
+      position: relative;
+      padding: 0;
+      display:block;
+      overflow:hidden;
+      box-shadow: 0 10px 24px rgba(17,24,39,.08);
+    }
+
+    .memInner{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+    }
+
+    .memFront{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .memBack{
+      opacity: 0;
+      transform: scale(.98);
+      transition: opacity .18s ease, transform .18s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .memBack img{
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 16px rgba(17,24,39,.10));
+    }
+
+    .memBack .word{
+      margin:0;
+      text-align:center;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .memCard.open .memBack{
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .memCard.open .memFront{
+      opacity: 0;
+    }
+
+    .memCard.matched{
+      outline: 3px solid rgba(22,163,74,.22);
+      border-color: rgba(22,163,74,.35);
+      cursor: default;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="app">
+
+      <header>
+        <div class="title">
+          <h1>Back to School: Winter Edition - 3</h1>
+          <p class="sub"></p>
+        </div>
+
+        <div class="headerRight">
+          <div class="snowBank" id="snowBank" aria-hidden="true"></div>
+
+          <div class="topBtns">
+            <button class="btn totalBtn" id="totalBtn" type="button" disabled>Total: 0/0</button>
+            <button class="btn" id="pauseBtn" title="Пауза">Pause</button>
+            <button class="btn" id="shuffleBtn" title="Перемешать задания">⟲ Shuffle</button>
+            <button class="btn" id="resetAllBtn" title="Сбросить всё">↻ Reset</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="layout">
+        <!-- LEFT -->
+        <aside class="sidebar">
+          <div class="sidebarHead">
+            <h2>  </h2>
+            <p>   Выбери Task и выполни задание.</p>
+          </div>
+          <div class="taskList" id="taskList"></div>
+        </aside>
+
+        <!-- RIGHT -->
+        <section class="stage" id="stage">
+          <div class="stageHead">
+            <div>
+              <h2 id="taskTitle">Выбери Task слева</h2>
+              <p id="taskDesc" class="note"></p>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <div class="k">Progress</div>
+                <div class="v" id="progVal">0/0</div>
+              </div>
+              <div class="stat">
+                <div class="k">Mistakes</div>
+                <div class="v" id="mistVal">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stageBody" id="stageBody">
+            <div class="note">Выбери Task слева.</div>
+          </div>
+
+          <div class="stageFoot">
+            <div class="note" id="statusNote">Статус: ожидание выбора задания.</div>
+          </div>
+
+          <div class="pauseOverlay" id="pauseOverlay" aria-hidden="true">
+            <div class="big">Пауза</div>
+            <div class="small">Нажми “Resume”, чтобы продолжить</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (sel)=>document.querySelector(sel);
+
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    function toast(msg){ /* disabled */ }
+
+    /* =========================
+       DATA
+    ========================== */
+    const TASK1_TO_BE = [
+      { text: "I ___ eleven.", opts:["am","is","are"], ans:"am" },
+      { text: "These ___ my new toys.", opts:["am","is","are"], ans:"are" },
+      { text: "She ___ my little sister.", opts:["am","is","are"], ans:"is" },
+      { text: "Children ___ in the living room.", opts:["am","is","are"], ans:"are" },
+      { text: "That ___ an aeroplane.", opts:["am","is","are"], ans:"is" },
+      { text: "Their names ___ Peter and Kate.", opts:["am","is","are"], ans:"are" },
+      { text: "My friend ___ from Russia.", opts:["am","is","are"], ans:"is" },
+      { text: "The piano ___ black.", opts:["am","is","are"], ans:"is" },
+	  { text: "We ___ at home now.", opts:["am","is","are"], ans:"are" },
+{ text: "The cat ___ under the table.", opts:["am","is","are"], ans:"is" },
+{ text: "I ___ very happy today.", opts:["am","is","are"], ans:"am" },
+{ text: "My parents ___ in the kitchen.", opts:["am","is","are"], ans:"are" },
+
+    ];
+
+    const TASK2_HAVE_GOT = [
+  { text: "I ___ got a sister.", opts:["have","has"], ans:"have" },
+  { text: "Tom ___ got a red bike.", opts:["have","has"], ans:"has" },
+  { text: "We ___ got a big house.", opts:["have","has"], ans:"have" },
+  { text: "Mum ___ got a black dress.", opts:["have","has"], ans:"has" },
+
+  { text: "___ you got a pet?", opts:["have","has"], ans:"have" },
+  { text: "___ she got a doll?", opts:["have","has"], ans:"has" },
+  { text: "___ they got a car?", opts:["have","has"], ans:"have" },
+  { text: "___ your dad got a bike?", opts:["have","has"], ans:"has" },
+
+  { text: "I ___ not got a computer.", opts:["have","has"], ans:"have" },
+  { text: "He ___ not got a brother.", opts:["have","has"], ans:"has" },
+  { text: "We ___ not got any juice.", opts:["have","has"], ans:"have" },
+  { text: "She ___ not got a car.", opts:["have","has"], ans:"has" },
+];
+
+
+    const TASK3_POSSESSIVE = [
+  { text: "___ am eight.", opts:["I","My"], ans:"I" },
+  { text: "This is ___ bag.", opts:["I","my"], ans:"my" },
+  { text: "___ is my friend Tom.", opts:["He","His"], ans:"He" },
+  { text: "This is ___ dog.", opts:["he","his"], ans:"his" },
+  { text: "___ are my parents.", opts:["Their","They"], ans:"They" },
+  { text: "This is ___ house.", opts:["we","our"], ans:"our" },
+
+  { text: "___ is ten years old.", opts:["She","Her"], ans:"She" },
+  { text: "This is ___ pencil.", opts:["you","your"], ans:"your" },
+  { text: "___ are good friends.", opts:["They","Their"], ans:"They" },
+  { text: "That is ___ school.", opts:["they","their"], ans:"their" },
+
+  { text: "Is this ___ book?", opts:["you","your"], ans:"your" },
+  { text: "Look at that elephant! ___ ears are big.", opts:["His","Its"], ans:"Its" },
+];
+
+
+    const TASK4_ODD_ROWS = [
+      { group:["eighteen","fourteen","sixteen"], odd:"nine" },
+      { group:["pencil","ruler","rubber"], odd:"teddy" },
+      { group:["Art","English","PE"], odd:"Russia" },
+      { group:["father","brother","grandpa"], odd:"boy" },
+      { group:["bathroom","bedroom","living room"], odd:"garden" },
+      { group:["books","toys","candles"], odd:"children" },
+      { group:["sandwiches","chicken","vegetables"], odd:"lemonade" },
+      { group:["armchair","table","bed"], odd:"door" },
+    ];
+
+    const TASK5_WORDS = [
+  { w:"cat",       cat:"a" },
+  { w:"dog",       cat:"a" },
+  { w:"chair",     cat:"a" },
+  { w:"table",     cat:"a" },
+  { w:"book",      cat:"a" },
+  { w:"ball",      cat:"a" },
+
+  { w:"apple",    cat:"an" },
+  { w:"egg",      cat:"an" },
+  { w:"orange",   cat:"an" },
+  { w:"umbrella", cat:"an" },
+  { w:"animal",   cat:"an" },
+
+  { w:"milk",     cat:"some" },
+  { w:"juice",    cat:"some" },
+  { w:"water",    cat:"some" },
+  { w:"bread",    cat:"some" },
+  { w:"cheese",   cat:"some" },
+  { w:"rice",     cat:"some" },
+  { w:"apples",   cat:"some" },
+  { w:"bananas",  cat:"some" },
+  { w:"sweets",   cat:"some" },
+];
+
+
+    const TASK6_MIX = [
+  { text:"___ old is your brother? - He is ten.", opts:["How","Who","Where","Whose"], ans:"How" },
+  { text:"___ is in the box? – It is a toy.", opts:["What","Who","Where","Whose"], ans:"What" },
+  { text:"___ is your mum now? – She is at home.", opts:["Where","Who","What","Whose"], ans:"Where" },
+  { text:"___ is that boy? – He is my friend.", opts:["Who","What","Where","Whose"], ans:"Who" },
+  { text:"___ are you today? – I'm fine. Thanks.", opts:["What","Who","How","Whose"], ans:"How" },
+  { text:"___ are the boys? – They are in the garden.", opts:["Where","Who","What","Whose"], ans:"Where" },
+  { text:"___ is her name? – Her name is Kate.", opts:["What","Who","Where","Whose"], ans:"What" },
+  { text:"___ are they? – They are my cousins.", opts:["Who","What","Where","Whose"], ans:"Who" },
+
+  { text:"___ bag is this? – It is my bag.", opts:["Whose","Who","What","Where"], ans:"Whose" },
+  { text:"___ bike is that? – It is Tom’s bike.", opts:["Whose","Who","What","Where"], ans:"Whose" },
+  { text:"___ pencils are these? – They are Ann’s.", opts:["Whose","Who","What","Where"], ans:"Whose" },
+  { text:"___ room is this? – It is our room.", opts:["Whose","Who","What","Where"], ans:"Whose" },
+];
+
+
+    const TASK7_YESNO = [
+  { text: "A cat is an animal.", opts:["Yes","No"], ans:"Yes" },
+  { text: "Frogs fly in the sky.", opts:["Yes","No"], ans:"No" },
+  { text: "We write with a pen.", opts:["Yes","No"], ans:"Yes" },
+  { text: "We sleep in the classroom.", opts:["Yes","No"], ans:"No" },
+  { text: "Green is a colour.", opts:["Yes","No"], ans:"Yes" },
+  { text: "Elephants are big.", opts:["Yes","No"], ans:"Yes" },
+  { text: "Apples are blue.", opts:["Yes","No"], ans:"No" },
+  { text: "It is hot in winter.", opts:["Yes","No"], ans:"No" },
+];
+
+
+    const TASK8_MEMORY = [
+      { id:"biscuits",   word:"biscuits",   img:"images/biscuits.png" },
+      { id:"chicken",   word:"chicken",   img:"images/chicken.png" },
+      { id:"juice",   word:"juice",   img:"images/juice.png" },
+      { id:"meat",  word:"meat",  img:"images/meat.png" },
+      { id:"vegetables",  word:"vegetables",  img:"images/vegetables.png" },
+      { id:"tomatoes", word:"tomatoes", img:"images/tomatoes.png" },
+	  { id:"rice", word:"rice", img:"images/rice.png" },
+	  { id:"sausages", word:"sausages", img:"images/sausages.png" },
+	  
+    ];
+const TASK_LIKES = [
+  { text: "I ___ vegetables.", opts:["like","likes"], ans:"like" },
+  { text: "Molly ___ milk.", opts:["like","likes"], ans:"likes" },
+  { text: "We ___ burgers.", opts:["like","likes"], ans:"like" },
+  { text: "My brother ___ dogs.", opts:["like","likes"], ans:"likes" },
+
+  { text: "I ___ apple juice.", opts:["don't like","doesn't like"], ans:"don't like" },
+  { text: "She ___ green tea.", opts:["don't like","doesn't like"], ans:"doesn't like" },
+  { text: "Our cats ___ fish.", opts:["don't like","doesn't like"], ans:"don't like" },
+  { text: "My friend ___ carrots.", opts:["don't like","doesn't like"], ans:"doesn't like" },
+
+  { text: "___ you like ice cream? - Yes, I do.", opts:["Do","Does"], ans:"Do" },
+  { text: "Do monkeys like bananas? - Yes, they ___.", opts:["do","does"], ans:"do" },
+  { text: "___ she like rice? - No, she doesn’t.", opts:["Do","Does"], ans:"Does" },
+  { text: "Does Ann like milk? - No, she ___.", opts:["don't","doesn't"], ans:"doesn't" },
+];
+
+    const tasks = [
+      { id:1, btn:"Task 1", tag:"to be",      type:"mcq",      title:"Task 1 - to be (am / is / are)", desc:"Выбери правильную форму." },
+      { id:2, btn:"Task 2", tag:"have got",   type:"mcq",      title:"Task 2 - have got / has got",    desc:"Выбери have или has." },
+      { id:3, btn:"Task 3", tag:"personal / possessive", type:"mcq", title:"Task 3 - personal / possessive",            desc:"Выбери нужное местоимение." },
+      { id:4, btn:"Task 4", tag:"odd one",    type:"odd",      title:"Task 4 - odd one out",           desc:"Нажми на лишнее слово." },
+      { id:5, btn:"Task 5", tag:"categories", type:"sortWords",title:"Task 5 - sort the words",        desc:"Перетащи слова по категориям." },
+      { id:6, btn:"Task 6", tag:"questions",  type:"mcq",      title:"Task 6 - Who / What / How / Where", desc:"Отметь правильное вопросительное слово." },
+      { id:7, btn:"Task 7", tag:"Yes / No", type:"mcq", title:"Task 7 - Yes or No",            desc:"Прочитай и выбери Yes или No." },
+      { id:8, btn:"Task 8", tag:"memory game",type:"pictures", title:"Task 8 -  Animals",              desc:"Кликай на карточки, чтобы найти пары." },
+	  { id:9, btn:"Task 9", tag:"like / likes", type:"mcq", title:"Task 9 - like / likes", desc:"Выбери правильную форму." },
+
+    ];
+
+    /* =========================
+       STATE
+    ========================== */
+    const state = {
+      activeTaskId: null,
+      found: 0,
+      need: 0,
+      mistakes: 0,
+      done: new Map(),
+      paused: false,
+      snowflakes: 0,
+      totalDone: 0,
+      totalNeed: 0,
+    };
+
+    const ui = {
+      taskList: $("#taskList"),
+      taskTitle: $("#taskTitle"),
+      taskDesc: $("#taskDesc"),
+      stageBody: $("#stageBody"),
+      progVal: $("#progVal"),
+      mistVal: $("#mistVal"),
+      statusNote: $("#statusNote"),
+      resetAllBtn: $("#resetAllBtn"),
+      pauseBtn: $("#pauseBtn"),
+      shuffleBtn: $("#shuffleBtn"),
+      stage: $("#stage"),
+      pauseOverlay: $("#pauseOverlay"),
+      totalBtn: $("#totalBtn"),
+      snowBank: $("#snowBank"),
+    };
+
+    function setStats(){
+      ui.progVal.textContent = `${state.found}/${state.need}`;
+      ui.mistVal.textContent = String(state.mistakes);
+    }
+
+    function computeTotalNeed(){
+  const yesNoNeed = TASK7_YESNO.length;      // 8
+  const memNeed = TASK8_MEMORY.length * 2;  // пары: слово+картинка
+
+  return (
+    TASK1_TO_BE.length +
+    TASK2_HAVE_GOT.length +
+    TASK3_POSSESSIVE.length +
+    TASK4_ODD_ROWS.length +
+    TASK5_WORDS.length +
+    TASK6_MIX.length +
+    yesNoNeed +
+    memNeed +
+    TASK_LIKES.length
+  );
+}
+
+
+    function updateTotalUI(){
+      if(!ui.totalBtn) return;
+      ui.totalBtn.textContent = `Total: ${state.totalDone}/${state.totalNeed}`;
+    }
+
+    function addCorrect(n = 1){
+      state.found += n;
+      state.totalDone += n;
+      setStats();
+      updateTotalUI();
+    }
+
+    function togglePause(){
+      if(!state.activeTaskId) return;
+      state.paused = !state.paused;
+
+      if(state.paused){
+        ui.pauseBtn.textContent = "Resume";
+        ui.stage.classList.add("isPaused");
+        ui.pauseOverlay.classList.add("show");
+      }else{
+        ui.pauseBtn.textContent = "Pause";
+        ui.stage.classList.remove("isPaused");
+        ui.pauseOverlay.classList.remove("show");
+      }
+    }
+
+    function markTaskDone(taskId){
+      state.done.set(taskId, { done:true });
+      renderTaskButtons();
+    }
+
+    function currentTask(){
+      return tasks.find(t => t.id === state.activeTaskId) || null;
+    }
+
+    function finishTask(taskId){
+      ui.statusNote.textContent = "Статус: задание выполнено ✅ Выбирай следующий Task слева.";
+      toast("Готово!");
+      markTaskDone(taskId);
+    }
+
+    /* =========================
+       LEFT BUTTONS
+    ========================== */
+    function renderTaskButtons(){
+      ui.taskList.innerHTML = "";
+      tasks.forEach(t=>{
+        const btn = document.createElement("button");
+        btn.className = "taskBtn" + (state.activeTaskId === t.id ? " active" : "");
+        btn.type = "button";
+
+        const left = document.createElement("div");
+        left.className = "left";
+        left.innerHTML = `<div>${t.btn}</div><div class="small">${t.tag}</div>`;
+
+        const right = document.createElement("div");
+        right.className = "right";
+
+        const dot = document.createElement("div");
+        dot.className = "doneDot" + (state.done.has(t.id) ? " done" : "");
+
+        const badge = document.createElement("div");
+        badge.className = "badge";
+        badge.textContent = state.done.has(t.id) ? "done" : "—";
+
+        right.appendChild(dot);
+        right.appendChild(badge);
+
+        btn.appendChild(left);
+        btn.appendChild(right);
+
+        btn.addEventListener("click", ()=>openTask(t.id));
+        ui.taskList.appendChild(btn);
+      });
+    }
+
+    /* =========================
+       SHUFFLE
+    ========================== */
+    function shuffleAll(){
+  // НЕ трогаем порядок задач слева — он должен быть стабильным
+  const keepId = state.activeTaskId;
+
+  // если задание не выбрано — ничего не делаем
+  if(!keepId){
+    toast("Choose a task first");
+    return;
+  }
+
+  // просто пересобираем ТЕКУЩЕЕ задание: внутри будет новая перемешка
+  openTask(keepId, { silent:true, reshuffle:true });
+  toast("Shuffled ✅");
+}
+
+
+    /* =========================
+       OPEN TASK
+    ========================== */
+    function openTask(taskId, opts = {}){
+      const { silent=false, reshuffle=false } = opts;
+
+      state.paused = false;
+      ui.pauseBtn.textContent = "Pause";
+      ui.stage.classList.remove("isPaused");
+      ui.pauseOverlay.classList.remove("show");
+
+      state.activeTaskId = taskId;
+      state.found = 0;
+      state.need = 0;
+      state.mistakes = 0;
+      setStats();
+
+      renderTaskButtons();
+
+      const task = currentTask();
+      ui.taskTitle.textContent = task.title;
+      ui.taskDesc.textContent = task.desc;
+      ui.statusNote.textContent = "Статус: выполняется задание…";
+
+      if(taskId === 1) buildMCQTask(taskId, TASK1_TO_BE);
+      else if(taskId === 2) buildMCQTask(taskId, TASK2_HAVE_GOT);
+      else if(taskId === 3) buildMCQTask(taskId, TASK3_POSSESSIVE);
+      else if(taskId === 4) buildOddOneOut(taskId);
+      else if(taskId === 5) buildSortWords(taskId);
+      else if(taskId === 6) buildMCQTask(taskId, TASK6_MIX);
+      else if(taskId === 7) buildMCQTask(taskId, TASK7_YESNO);
+      else if(taskId === 8) buildMemoryGame(taskId);
+	  else if(taskId === 9) buildMCQTask(taskId, TASK_LIKES);
+
+
+      if(!silent && reshuffle) toast("New set for next student");
+    }
+
+    /* =========================
+       BUILDERS
+    ========================== */
+    function buildMCQTask(taskId, items){
+      const list = shuffle([...items]);
+
+      state.need = list.length;
+      state.found = 0;
+      setStats();
+
+     ui.stageBody.innerHTML = `
+  <div class="${
+  taskId === 3 ? 'task3Scroll' :
+  taskId === 1 ? 'task1Scroll' :
+  taskId === 2 ? 'task2Scroll' :
+  taskId === 6 ? 'task6Scroll' :
+  taskId === 9 ? 'task9Scroll' : ''
+}">
+
+
+    <div class="qList" id="qList"></div>
+  </div>
+`;
+
+
+
+      const host = $("#qList");
+
+      list.forEach((q, idx)=>{
+        const row = document.createElement("div");
+        row.className = "qRow";
+        row.dataset.done = "0";
+
+        const text = document.createElement("div");
+        text.className = "qText";
+        text.textContent = `${idx+1}) ${q.text}`;
+
+        const btns = document.createElement("div");
+        btns.className = "qBtns";
+
+        const opts = shuffle([...q.opts]);
+
+        opts.forEach(opt=>{
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "opt";
+          b.textContent = opt;
+
+          b.addEventListener("click", ()=>{
+            if(state.paused) return;
+            if(row.dataset.done === "1") return;
+
+            if(opt === q.ans){
+              row.dataset.done = "1";
+              b.classList.add("locked");
+
+              [...btns.querySelectorAll(".opt")].forEach(x=>{
+                x.disabled = true;
+                if(x !== b) x.style.opacity = ".55";
+              });
+
+              addCorrect(1);
+              if(state.found >= state.need) finishTask(taskId);
+            } else {
+              state.mistakes++;
+              setStats();
+              b.classList.add("wrong");
+              setTimeout(()=>b.classList.remove("wrong"), 600);
+            }
+          });
+
+          btns.appendChild(b);
+        });
+
+        row.appendChild(text);
+        row.appendChild(btns);
+        host.appendChild(row);
+      });
+    }
+
+    function buildOddOneOut(taskId){
+      const rows = shuffle([...TASK4_ODD_ROWS]);
+
+      state.need = rows.length;
+      state.found = 0;
+      setStats();
+
+      ui.stageBody.innerHTML = `<div class="oddGrid" id="oddGrid"></div>`;
+      const host = $("#oddGrid");
+
+      rows.forEach((r)=>{
+        const row = document.createElement("div");
+        row.className = "oddRow";
+        row.dataset.done = "0";
+
+        const words = shuffle([...r.group, r.odd]);
+
+        words.forEach(w=>{
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "opt";
+          b.textContent = w;
+
+          b.addEventListener("click", ()=>{
+            if(state.paused) return;
+            if(row.dataset.done === "1") return;
+
+            if(w === r.odd){
+              row.dataset.done = "1";
+              b.classList.add("locked");
+              [...row.querySelectorAll(".opt")].forEach(x=>{
+                x.disabled = true;
+                if(x !== b) x.style.opacity = ".55";
+              });
+
+              addCorrect(1);
+              if(state.found >= state.need) finishTask(taskId);
+            } else {
+              state.mistakes++;
+              setStats();
+              b.classList.add("wrong");
+              setTimeout(()=>b.classList.remove("wrong"), 600);
+            }
+          });
+
+          row.appendChild(b);
+        });
+
+        host.appendChild(row);
+      });
+    }
+
+    function buildSortWords(taskId){
+      state.need = TASK5_WORDS.length;
+      state.found = 0;
+      setStats();
+
+      ui.stageBody.innerHTML = `
+        <div class="sortArea sortWordsArea">
+          <div class="pool">
+            <div class="poolTitle">Words</div>
+            <div class="items" id="wordPool"></div>
+          </div>
+
+          <div class="bin" id="binA" data-cat="a">
+  <div class="binHead">
+    <div class="binTitle">a</div>
+    <div class="binHint">drop here</div>
+  </div>
+  <div class="items" id="aItems"></div>
+</div>
+
+<div class="bin" id="binAn" data-cat="an">
+  <div class="binHead">
+    <div class="binTitle">an</div>
+    <div class="binHint">drop here</div>
+  </div>
+  <div class="items" id="anItems"></div>
+</div>
+
+<div class="bin" id="binSome" data-cat="some">
+  <div class="binHead">
+    <div class="binTitle">some</div>
+    <div class="binHint">drop here</div>
+  </div>
+  <div class="items" id="someItems"></div>
+</div>
+      `;
+
+      const pool = $("#wordPool");
+      shuffle([...TASK5_WORDS]).forEach(item=>{
+        pool.appendChild(makeChip(item));
+      });
+
+      setupBin($("#binA"));
+setupBin($("#binAn"));
+setupBin($("#binSome"));
+
+
+      function makeChip(item){
+        const el = document.createElement("div");
+        el.className = "chip";
+        el.draggable = true;
+        el.dataset.word = item.w;
+        el.dataset.cat = item.cat;
+        el.textContent = item.w;
+
+        el.addEventListener("dragstart", (e)=>{
+          if(state.paused){ e.preventDefault(); return; }
+          e.dataTransfer.setData("text/plain", item.w);
+        });
+        return el;
+      }
+
+      function setupBin(binEl){
+        binEl.addEventListener("dragover", (e)=>{
+          if(state.paused) return;
+          e.preventDefault();
+          binEl.classList.add("dropOk");
+        });
+        binEl.addEventListener("dragleave", ()=> binEl.classList.remove("dropOk"));
+        binEl.addEventListener("drop", (e)=>{
+          if(state.paused) return;
+          e.preventDefault();
+          binEl.classList.remove("dropOk");
+          const w = e.dataTransfer.getData("text/plain");
+          if(!w) return;
+          handlePlace(w, binEl.dataset.cat);
+        });
+      }
+
+      function handlePlace(word, cat){
+        const chip = [...document.querySelectorAll(".chip")].find(x=>x.dataset.word === word);
+        if(!chip) return;
+
+        const correct = chip.dataset.cat === cat;
+
+        if(correct){
+let targetBox = $("#aItems");
+if(cat === "an") targetBox = $("#anItems");
+if(cat === "some") targetBox = $("#someItems");
+
+          targetBox.appendChild(chip);
+          chip.draggable = false;
+          chip.style.cursor = "default";
+
+          addCorrect(1);
+          if(state.found >= state.need) finishTask(taskId);
+        } else {
+          state.mistakes++;
+          setStats();
+          chip.classList.add("wrong");
+          setTimeout(()=>chip.classList.remove("wrong"), 600);
+        }
+      }
+    }
+
+    function buildIPARows(taskId){
+      const rows = shuffle(TASK7_IPA_ROWS.map(r=>({
+        ipa: r.ipa,
+        words: shuffle([...r.words]),
+        correct: r.correct
+      })));
+
+      state.need = rows.reduce((s,r)=> s + r.correct.length, 0);
+      state.found = 0;
+      state.mistakes = 0;
+      setStats();
+
+      ui.stageBody.innerHTML = `<div class="ipaRows" id="ipaRows"></div>`;
+      const host = $("#ipaRows");
+      const answered = new Set();
+
+      rows.forEach((r, idx)=>{
+        const rowEl = document.createElement("div");
+        rowEl.className = "ipaRow";
+        rowEl.dataset.done = "0";
+        rowEl.dataset.need = String(r.correct.length);
+        rowEl.dataset.got = "0";
+
+        const badge = document.createElement("div");
+        badge.className = "ipaBadge";
+        badge.textContent = r.ipa;
+
+        const line = document.createElement("div");
+        line.className = "wordLine";
+
+        r.words.forEach(w=>{
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "wBtn";
+          b.textContent = w;
+
+          b.addEventListener("click", ()=>{
+            if(state.paused) return;
+            if(rowEl.dataset.done === "1") return;
+
+            const key = `${idx}|${w}`;
+            const isCorrect = r.correct.includes(w);
+
+            if(isCorrect){
+              if(answered.has(key)) return;
+              answered.add(key);
+
+              b.classList.add("good");
+              b.disabled = true;
+
+              addCorrect(1);
+
+              const got = Number(rowEl.dataset.got) + 1;
+              rowEl.dataset.got = String(got);
+
+              if(got >= Number(rowEl.dataset.need)){
+                rowEl.dataset.done = "1";
+                rowEl.classList.add("locked");
+                [...line.querySelectorAll(".wBtn")].forEach(x=> x.disabled = true);
+              }
+
+              if(state.found >= state.need) finishTask(taskId);
+            } else {
+              state.mistakes++;
+              setStats();
+              b.classList.add("bad");
+              setTimeout(()=>b.classList.remove("bad"), 550);
+            }
+          });
+
+          line.appendChild(b);
+        });
+
+        rowEl.appendChild(badge);
+        rowEl.appendChild(line);
+        host.appendChild(rowEl);
+      });
+    }
+
+    function buildMemoryGame(taskId){
+      const deck = [];
+      TASK8_MEMORY.forEach(a=>{
+        deck.push({ pair:a.id, type:"word", value:a.word });
+        deck.push({ pair:a.id, type:"img",  value:a.img  });
+      });
+
+      shuffle(deck);
+      const numbers = shuffle([...Array(deck.length)].map((_,i)=>i+1));
+
+      state.need = deck.length;   // 16
+      state.found = 0;
+      state.mistakes = 0;
+      setStats();
+
+      ui.stageBody.innerHTML = `<div class="memGrid" id="memGrid"></div>`;
+      const host = $("#memGrid");
+
+      let first = null;
+      let second = null;
+      let lock = false;
+
+      deck.forEach((card, idx)=>{
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "memCard";
+        btn.dataset.i = String(idx);
+        btn.dataset.pair = card.pair;
+        btn.dataset.type = card.type;
+        btn.dataset.matched = "0";
+
+        btn.innerHTML = `
+          <div class="memInner">
+            <div class="memFront">${numbers[idx]}</div>
+            <div class="memBack">
+              ${
+                card.type === "img"
+                  ? `<img src="${card.value}" alt="${card.pair}">`
+                  : `<div class="word">${card.value}</div>`
+              }
+            </div>
+          </div>
+        `;
+
+        btn.addEventListener("click", ()=>{
+          if(state.paused) return;
+          if(lock) return;
+          if(btn.dataset.matched === "1") return;
+          if(btn.classList.contains("open")) return;
+
+          btn.classList.add("open");
+
+          if(!first){
+            first = btn;
+            return;
+          }
+          if(first === btn) return;
+
+          second = btn;
+          lock = true;
+
+          const isMatch = (first.dataset.pair === second.dataset.pair);
+
+          if(isMatch){
+            first.dataset.matched = "1";
+            second.dataset.matched = "1";
+            first.classList.add("matched");
+            second.classList.add("matched");
+
+            addCorrect(2);
+
+            first = null; second = null; lock = false;
+
+            if(state.found >= state.need) finishTask(taskId);
+          } else {
+            state.mistakes++;
+            setStats();
+
+            setTimeout(()=>{
+              first.classList.remove("open");
+              second.classList.remove("open");
+              first = null; second = null; lock = false;
+            }, 650);
+          }
+        });
+
+        host.appendChild(btn);
+      });
+    }
+
+    /* =========================
+       CONTROLS
+    ========================== */
+    ui.pauseBtn.addEventListener("click", togglePause);
+    ui.shuffleBtn.addEventListener("click", shuffleAll);
+
+    ui.resetAllBtn.addEventListener("click", ()=>{
+      state.activeTaskId = null;
+      state.found = 0; state.need = 0; state.mistakes = 0;
+      state.done.clear();
+
+      state.paused = false;
+      ui.pauseBtn.textContent = "Pause";
+      ui.stage.classList.remove("isPaused");
+      ui.pauseOverlay.classList.remove("show");
+
+      state.snowflakes = 0;
+      if(ui.snowBank) ui.snowBank.innerHTML = "";
+
+      state.totalDone = 0;
+      updateTotalUI();
+
+      setStats();
+
+      ui.taskTitle.textContent = "Выбери Task слева";
+      ui.taskDesc.textContent = "Нажми Shuffle, чтобы перемешать задания/вопросы для следующего ученика.";
+      ui.stageBody.innerHTML = `<div class="note">Выбери Task слева.</div>`;
+      ui.statusNote.textContent = "Статус: ожидание выбора задания.";
+
+      renderTaskButtons();
+      toast("Reset done");
+    });
+
+    /* ✅ INIT */
+    state.totalNeed = computeTotalNeed();
+    updateTotalUI();
+    renderTaskButtons();
+    setStats();
+  </script>
+</body>
+</html>
