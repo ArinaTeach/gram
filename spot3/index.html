@@ -1332,8 +1332,7 @@ if(cat === "some") targetBox = $("#someItems");
           addCorrect(1);
           if(state.found >= state.need) finishTask(taskId);
         } else {
-          state.mistakes++;
-          setStats();
+         
           chip.classList.add("wrong");
           setTimeout(()=>chip.classList.remove("wrong"), 600);
         }
