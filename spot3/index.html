@@ -7,7 +7,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
 
   <style>
     :root{
@@ -43,8 +44,10 @@
     body{
       margin:0;
       color:var(--ink);
-      font-family: "Atkinson Hyperlegible", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
-
+     font-family: "Nunito", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+font-weight: 400;      /* обычный */
+  font-size: 17px;       /* комфортно для 3 класса */
+  line-height: 1.4;      /* воздух */
       background-image: url("images/back.png");
       background-size: cover;
       background-position: center;
@@ -130,7 +133,7 @@
       padding: 10px 12px;
       border-radius: 14px;
       cursor:pointer;
-      font-weight: 800;
+      font-weight: 600;
       min-height: var(--tap);
       display:inline-flex;
       align-items:center;
@@ -203,7 +206,7 @@ top: -16px;
       color: var(--ink);
       cursor:pointer;
       min-height: var(--tap);
-      font-weight: 900;
+      font-weight: 600;
       display:flex;
       align-items:center;
       gap: 10px;
@@ -369,26 +372,30 @@ top: -16px;
       gap: 10px;
     }
     .qText{
-      font-weight: 900;
-      font-size: 16px;
-      line-height:1.25;
+      font-weight: 600;
+      font-size: 17px;
+      line-height:1.35;
       color: var(--ink);
     }
     .qBtns{ display:flex; gap: 8px; flex-wrap:wrap; justify-content:flex-end; }
     .opt{
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.86);
-      color: var(--ink);
-      border-radius: 14px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-weight: 900;
-      min-height: 40px;
-      min-width: 54px;
-      transition: transform .05s ease, background .15s ease;
-      -webkit-tap-highlight-color: transparent;
-      font-size: 15px;
-    }
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.86);
+  color: var(--ink);
+  border-radius: 14px;
+
+  padding: 10px 12px;
+
+  cursor: pointer;
+  font-weight: 600;   /* как у текста */
+  font-size: 17px;    /* читаемо для 3 кл */
+  min-height: 42px;
+  min-width: 60px;
+
+  transition: transform .05s ease, background .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
     .opt:hover{ background: rgba(255,255,255,.96); }
     .opt:active{ transform: translateY(1px); }
     .opt.locked{
@@ -909,7 +916,7 @@ const TASK_LIKES = [
       { id:5, btn:"Task 5", tag:"categories", type:"sortWords",title:"Task 5 - sort the words",        desc:"Перетащи слова по категориям." },
       { id:6, btn:"Task 6", tag:"questions",  type:"mcq",      title:"Task 6 - Who / What / How / Where", desc:"Отметь правильное вопросительное слово." },
       { id:7, btn:"Task 7", tag:"Yes / No", type:"mcq", title:"Task 7 - Yes or No",            desc:"Прочитай и выбери Yes или No." },
-      { id:8, btn:"Task 8", tag:"memory game",type:"pictures", title:"Task 8 -  Animals",              desc:"Называй числа, кликай на карточки, чтобы найти пары." },
+      { id:8, btn:"Task 8", tag:"memory game",type:"pictures", title:"Task 8 -  Animals",              desc:"Кликай на карточки, чтобы найти пары." },
 	  { id:9, btn:"Task 9", tag:"like / likes", type:"mcq", title:"Task 9 - like / likes", desc:"Выбери правильную форму." },
 
     ];
@@ -1332,8 +1339,8 @@ if(cat === "some") targetBox = $("#someItems");
           addCorrect(1);
           if(state.found >= state.need) finishTask(taskId);
         } else {
-         state.mistakes++;
-  setStats();
+          state.mistakes++;
+          setStats();
           chip.classList.add("wrong");
           setTimeout(()=>chip.classList.remove("wrong"), 600);
         }
@@ -1494,8 +1501,7 @@ if(cat === "some") targetBox = $("#someItems");
 
             if(state.found >= state.need) finishTask(taskId);
           } else {
-           
-
+            
             setTimeout(()=>{
               first.classList.remove("open");
               second.classList.remove("open");
