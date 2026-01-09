@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ru">
 <head>
@@ -8,7 +7,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
 
   <style>
     :root{
@@ -44,7 +44,10 @@
     body{
       margin:0;
       color:var(--ink);
-      font-family: "Atkinson Hyperlegible", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+      font-family: "Nunito", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+font-weight: 400;
+font-size: 16px;
+line-height: 1.4;
 
       background-image: url("images/back.png");
       background-size: cover;
@@ -370,26 +373,28 @@ top: -16px;
       gap: 10px;
     }
     .qText{
-      font-weight: 900;
-      font-size: 16px;
-      line-height:1.25;
-      color: var(--ink);
-    }
+  font-weight: 600;     /* обычный, читаемый */
+  font-size: 17px;      /* чуть крупнее */
+  line-height: 1.35;    /* воздух между строк */
+  color: var(--ink);
+}
+
     .qBtns{ display:flex; gap: 8px; flex-wrap:wrap; justify-content:flex-end; }
     .opt{
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.86);
-      color: var(--ink);
-      border-radius: 14px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-weight: 900;
-      min-height: 40px;
-      min-width: 54px;
-      transition: transform .05s ease, background .15s ease;
-      -webkit-tap-highlight-color: transparent;
-      font-size: 15px;
-    }
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.86);
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 10px 12px;
+
+  cursor: pointer;
+
+  font-weight: 600;     /* 👈 обычный */
+  font-size: 16px;      /* 👈 как текст */
+  min-height: 42px;
+  min-width: 60px;
+}
+
     .opt:hover{ background: rgba(255,255,255,.96); }
     .opt:active{ transform: translateY(1px); }
     .opt.locked{
